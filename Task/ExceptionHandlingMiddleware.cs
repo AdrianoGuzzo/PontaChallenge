@@ -1,4 +1,5 @@
-﻿using ApiTask.Exceptions;
+﻿using ApiTask.Dto.Out;
+using ApiTask.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
@@ -24,7 +25,7 @@ namespace ApiTask
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Uma exceção ocorreu.");
-      
+
                 httpContext.Response.ContentType = "application/json";
                 switch (ex)
                 {
@@ -36,20 +37,34 @@ namespace ApiTask
                         break;
                     case ArgumentException _:
                     case ValidationException _:
+                    case KeyNotFoundException _:
                         httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                         break;
                     case Exception _:
+                    default:
                         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         break;
                 }
 
-                var response = new
+                var response = new ErrorResponse
                 {
-                    message = ex.Message
+                    Messages = [.. GetMessagesByException(ex)]
                 };
 
                 await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
-            }        
+            }
+        }
+
+        private static List<string> GetMessagesByException(Exception ex, List<string>? messages = null)
+        {
+            messages ??= [];
+
+            messages.Add(ex.Message);
+
+            if (ex.InnerException is not null)
+                return GetMessagesByException(ex.InnerException, messages);
+
+            return messages;
         }
     }
 }

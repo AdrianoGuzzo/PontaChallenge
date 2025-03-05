@@ -35,10 +35,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(c =>
-    {
-
-    });
+    app.UseSwagger();
 
     app.UseSwaggerUI(options =>
     {

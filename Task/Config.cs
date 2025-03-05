@@ -4,6 +4,7 @@ using ApiTask.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using ApiTask.DataInfrastructure.Context.Interfaces;
 
 namespace ApiTask
 {
@@ -11,9 +12,14 @@ namespace ApiTask
     {
         public static WebApplication CreateBuilder(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
+            
             string? urlBaseGateway = builder.Configuration.GetSection("UrlBaseGateway").Get<string>();
 
-            builder.Services.AddDbContext<TaskDbContext>(options =>
+            builder.Logging.ClearProviders(); 
+            builder.Logging.AddConsole(); 
+            builder.Logging.AddDebug(); 
+
+            builder.Services.AddDbContext<ITaskContext, TaskDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetSection("ConnectionStringsSqlLite").Get<string>()));
 
             builder.Services.AddScoped<ITaskService, TaskService>();

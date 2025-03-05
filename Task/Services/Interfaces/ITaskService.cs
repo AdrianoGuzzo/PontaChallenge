@@ -8,8 +8,8 @@ namespace ApiTask.Services.Interfaces
     {
         Task<TaskOutDto> GetById(string id);
         Task<TaskOutDto[]> GetList(Status? status);
-        Task<bool> Create(TaskInDto taskCreateDto, string userId);
-        Task<bool> Update(string id, TaskInDto taskUpdateDto, string userId);
+        Task<TaskOutDto> Create(TaskInDto taskCreateDto, string userId);
+        Task<TaskOutDto> Update(string id, TaskInDto taskUpdateDto, string userId);
         Task<bool> Delete(string id, string userId);
     }
 }

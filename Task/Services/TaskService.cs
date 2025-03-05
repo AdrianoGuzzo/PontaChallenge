@@ -1,4 +1,5 @@
 ﻿using ApiTask.DataInfrastructure.Context;
+using ApiTask.DataInfrastructure.Context.Interfaces;
 using ApiTask.DataInfrastructure.Entities.Enum;
 using ApiTask.Dto.In;
 using ApiTask.Dto.Out;
@@ -8,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiTask.Services
 {
-    public class TaskService(TaskDbContext taskDbContext) : ITaskService
+    public class TaskService(ITaskContext taskDbContext) : ITaskService
     {
-        private readonly TaskDbContext _taskDbContext = taskDbContext;
+        private readonly ITaskContext _taskDbContext = taskDbContext;
 
         public async Task<TaskOutDto> GetById(string id)
         {
@@ -20,7 +21,7 @@ namespace ApiTask.Services
         }
         public async Task<TaskOutDto[]> GetList(Status? status)
         {
-            var query = _taskDbContext.Task.AsQueryable();
+            var query = _taskDbContext.AsQueryable<DataInfrastructure.Entities.Task>();
 
             if (status is not null)
                 query = query.Where(task => task.Status == status);
@@ -30,15 +31,15 @@ namespace ApiTask.Services
             return list.Select(task => task.GetToDto()).ToArray();
         }
 
-        public async Task<bool> Create(TaskInDto taskCreateDto, string userId)
+        public async Task<TaskOutDto> Create(TaskInDto taskCreateDto, string userId)
         {
             var taskEntity = DataInfrastructure.Entities.Task.New(taskCreateDto, userId);
             await _taskDbContext.AddAsync(taskEntity);
             _taskDbContext.SaveChanges();
-            return true;
+            return taskEntity.GetToDto();
         }
 
-        public async Task<bool> Update(string id, TaskInDto taskIUpdateDto, string userId)
+        public async Task<TaskOutDto> Update(string id, TaskInDto taskIUpdateDto, string userId)
         {
             var userIdGuid = Guid.Parse(userId);
             var taskEntity = await GetEntityById(id);
@@ -48,7 +49,7 @@ namespace ApiTask.Services
 
             taskEntity.UpdateFromDto(taskIUpdateDto);
             _taskDbContext.SaveChanges();
-            return true;
+            return taskEntity.GetToDto();
         }
 
         public async Task<bool> Delete(string id, string userId)
@@ -59,16 +60,17 @@ namespace ApiTask.Services
             if (!taskEntity.UserId.Equals(userIdGuid))
                 throw new ForbiddenAccessException("Usuário não autorizado para deletar");
 
-            _taskDbContext.Task.Remove(taskEntity);
+            _taskDbContext.Remove(taskEntity);
             _taskDbContext.SaveChanges();
             return true;
         }
 
         private async Task<DataInfrastructure.Entities.Task> GetEntityById(string id)
         {
-            var taskEntity = await _taskDbContext.Task.SingleOrDefaultAsync(task => task.Id.ToString() == id);
+            Guid idGuid = Guid.Parse(id);
+            var taskEntity = await _taskDbContext.SingleOrDefaultAsync<DataInfrastructure.Entities.Task>(task => task.Id.Equals(idGuid));
             if (taskEntity is null)
-                throw new KeyNotFoundException(id);
+                throw new KeyNotFoundException("Tarefa não encontrada");
             return taskEntity;
 
         }

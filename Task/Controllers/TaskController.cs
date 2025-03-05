@@ -9,6 +9,10 @@ namespace ApiTask.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [JwtUserIdFilter]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public class TaskController(ITaskService taskService) : ControllerBase
     {
         private readonly ITaskService _taskService = taskService;
@@ -19,7 +23,8 @@ namespace ApiTask.Controllers
         /// <param name="status"></param>
         /// <returns>Retorna uma lista de tarefas</returns>
         [HttpGet("List/{status?}")]
-        [ProducesResponseType(typeof(TaskOutDto[]), 200)]
+        [ProducesResponseType(typeof(TaskOutDto[]), StatusCodes.Status200OK)]
+
         public async Task<IActionResult> GetList(Status? status)
             => Ok(await _taskService.GetList(status));
 
@@ -37,21 +42,21 @@ namespace ApiTask.Controllers
         /// Cria Tarefa
         /// </summary>
         /// <param name="taskCreateDto">Model de entrada</param>
-        /// <returns>Retorna verdadeiro se salvo corretamente</returns>
+        /// <returns>Retorna a tarefa</returns>
         [HttpPost]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(TaskOutDto), 200)]
         public async Task<IActionResult> Create(TaskInDto taskCreateDto)
             => Ok(await _taskService.Create(taskCreateDto, GetUserId()));
-        
+
 
         /// <summary>
         /// Atualiza tarefa
         /// </summary>
         /// <param name="id"></param>
         /// <param name="taskUpdateDto">Model de entrada</param>
-        /// <returns>Retorna verdadeiro se atualizou com sucesso</returns>
+        /// <returns>Retorna a tarefa</returns>
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(TaskOutDto), 200)]
         public async Task<IActionResult> Update(string id, TaskInDto taskUpdateDto)
             => Ok(await _taskService.Update(id, taskUpdateDto, GetUserId()));
 
@@ -59,7 +64,6 @@ namespace ApiTask.Controllers
         /// Deleta tarefa
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="taskUpdateDto">Model de entrada</param>
         /// <returns>Retorna verdadeiro se atualizou com sucesso</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), 200)]
