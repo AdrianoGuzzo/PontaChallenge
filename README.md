@@ -117,3 +117,12 @@ C --> E((SqlLite))
   "password":"Pass123$"
 }
 ```
+### Exemplo de requisição para gerar o token JWT
+```shell
+curl --request POST \
+  --url https://localhost:7206/User/SignIn \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --header 'User-Agent: insomnia/2023.5.8' \
+  --data 'password=Pass123$' \
+  --data login=admin@email.com
+```
