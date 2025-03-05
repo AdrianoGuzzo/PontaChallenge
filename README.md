@@ -103,6 +103,7 @@ C --> E((SqlLite))
 - O projeto foi desenvolvido utilizando .NET 8 e Microsoft Visual Studio Community 2022.
 - A persistência de dados foi implementada com Entity Framework (EF) Core, utilizando SQLite e Migrations. Ao iniciar o projeto, o banco de dados local será criado automaticamente, incluindo os dados iniciais de usuários.
 - Para o correto funcionamento do sistema, é essencial executar os três serviços simultaneamente.
+- Se houver algum problema de conexão, verifique o arquivo appsettings.json e confirme se os endereços configurados correspondem aos serviços em execução.
 - O sistema já possui dois usuários pré-cadastrados para fins de teste:
 ```json
 {
