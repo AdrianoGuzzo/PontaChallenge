@@ -482,3 +482,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+IdentityServer/IdentityServer.db
+IdentityServer/IdentityServer.db-shm
+IdentityServer/IdentityServer.db-wal
+Task/Task.db
+Task/Task.db-shm
+Task/Task.db-wal
