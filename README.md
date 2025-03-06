@@ -95,11 +95,12 @@ Abaixo, segue um diagrama representando a arquitetura do sistema:
 
 ```mermaid
 graph LR
-A[Gateway] -- Autenticação --> B[IdentityServer]
-A --> C(Api Task)
-A --> F(New Service...)
-B --> D((SqlLite))
-C --> E((SqlLite))
+A[Front] --> B[Gateway]
+B -- Autenticação --> C[IdentityServer]
+B --> D(Api Task)
+B --> G(New Service...)
+D --> E((SqlLite))
+C --> F((SqlLite))
 ```
 ## Informações Importantes para a Execução do Projeto
 - O projeto foi desenvolvido utilizando .NET 8 e Microsoft Visual Studio Community 2022.
