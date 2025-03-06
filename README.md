@@ -86,6 +86,7 @@ Este projeto foi desenvolvido utilizando uma arquitetura baseada em microserviç
 - Identity Server: Responsável pelo controle de autenticação e autorização dos usuários, gerenciando a emissão e validação de tokens JWT.
 - API Gateway: Atua como um proxy reverso, centralizando todas as requisições, autenticando os usuários via token JWT e distribuindo as chamadas para os serviços correspondentes.
 - API de Tarefas: Responsável pelo gerenciamento das regras de negócio relacionadas às tarefas cadastradas.
+  
 O principal objetivo desse projeto foi projetar uma arquitetura escalável, permitindo a adição de novas APIs conforme novas funcionalidades sejam implementadas. O API Gateway serve como ponto central para rotear e balancear as requisições entre os serviços, garantindo flexibilidade e modularidade.
 
 Para facilitar o desenvolvimento, foi utilizado SQLite como banco de dados, em conjunto com Entity Framework (EF) Core e Migrations para gerenciamento da persistência de dados.
