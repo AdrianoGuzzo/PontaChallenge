@@ -97,6 +97,7 @@ Abaixo, segue um diagrama representando a arquitetura do sistema:
 graph LR
 A[Gateway] -- Autenticação --> B[IdentityServer]
 A --> C(Api Task)
+A --> F(New Service...)
 B --> D((SqlLite))
 C --> E((SqlLite))
 ```
