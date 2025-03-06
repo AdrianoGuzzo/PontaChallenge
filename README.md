@@ -99,8 +99,8 @@ A[Front] --> B[Gateway]
 B -- Autenticação --> C[IdentityServer]
 B --> D(Api Task)
 B --> G(New Service...)
-D --> E((SqlLite))
-C --> F((SqlLite))
+D --> E[("SqlLite")]
+C --> F[("SqlLite")]
 ```
 ## Informações Importantes para a Execução do Projeto
 - O projeto foi desenvolvido utilizando .NET 8 e Microsoft Visual Studio Community 2022.
