@@ -96,7 +96,7 @@ Abaixo, segue um diagrama representando a arquitetura do sistema:
 ```mermaid
 graph LR
 A[Front] --> B[Gateway]
-B -- Autenticação --> C[IdentityServer]
+B -- Authentication --> C[IdentityServer]
 B --> D(Api Task)
 B --> G(New Service...)
 D --> E[("SqlLite")]
